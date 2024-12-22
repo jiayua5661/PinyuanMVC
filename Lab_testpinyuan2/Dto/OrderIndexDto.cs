@@ -6,8 +6,6 @@ namespace Lab_testpinyuan2.Dto
     {
         public int OrderId { get; set; }
 
-        public int CompanyId { get; set; }
-
         [DisplayName("客戶名稱")]
         public string CompanyName { get; set; } = null!;
 

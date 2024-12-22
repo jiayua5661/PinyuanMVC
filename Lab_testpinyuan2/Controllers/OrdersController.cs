@@ -30,7 +30,6 @@ namespace Lab_testpinyuan2.Controllers
                          select new OrderIndexDto
                          {
                              OrderId = a.OrderId,
-                             CompanyId = a.CompanyId,
                              CompanyName = b.CompanyName,
                              OrderDate = a.OrderDate,
                              QuoteNumber = a.QuoteNumber
@@ -58,9 +57,17 @@ namespace Lab_testpinyuan2.Controllers
 
         // 自己寫的
         //order 跟 多筆orderDetail 一起新增頁面
-        public IActionResult CreateOrderOrderDetail()
+        public async Task<IActionResult> CreateOrderOrderDetail()
         {
-            return View();
+            var OrderOrderDetailCreateViewModel = new OrderOrderDetailCreateViewModel();
+
+            OrderOrderDetailCreateViewModel.EditOrderClientDtos = await(from a in _context.Clients
+                                                                      select new EditOrderClientDto
+                                                                      {
+                                                                          ClientId = a.ClientId,
+                                                                          CompanyName = a.CompanyName,
+                                                                      }).ToListAsync();
+            return View(OrderOrderDetailCreateViewModel);
         }
 
         // 自己寫的
@@ -157,7 +164,8 @@ namespace Lab_testpinyuan2.Controllers
             return View(OrderOrderDetailEditViewModel);
         }
 
-
+        // 自己寫的 Edit
+        //order 跟 多筆orderDetail 一起更新 新增
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditOrderOrderDetail(int id, EditOrderDto Order)
