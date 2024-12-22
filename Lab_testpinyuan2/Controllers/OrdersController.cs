@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab_testpinyuan2.Models;
 using LAB_testpinyuan.Dto;
+using System.ComponentModel.Design;
+using Lab_testpinyuan2.Dto;
+using Lab_testpinyuan2.ViewModels;
 
 namespace Lab_testpinyuan2.Controllers
 {
@@ -22,7 +25,17 @@ namespace Lab_testpinyuan2.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Orders.ToListAsync());
+            var result = from a in _context.Orders
+                         join b in _context.Clients on a.CompanyId equals b.ClientId
+                         select new OrderIndexDto
+                         {
+                             OrderId = a.OrderId,
+                             CompanyId = a.CompanyId,
+                             CompanyName = b.CompanyName,
+                             OrderDate = a.OrderDate,
+                             QuoteNumber = a.QuoteNumber
+                         };
+            return View(await result.ToListAsync());
         }
 
         // GET: Orders/Details/5
@@ -43,32 +56,42 @@ namespace Lab_testpinyuan2.Controllers
             return View(order);
         }
 
+        // 自己寫的
+        //order 跟 多筆orderDetail 一起新增頁面
         public IActionResult CreateOrderOrderDetail()
         {
             return View();
         }
+
+        // 自己寫的
+        // 新增 沒有外鍵 order 跟 orderdetail insert
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateOrderOrderDetail(OrderDto orderDto)
         {
             if (ModelState.IsValid)
             {
+                // order 是 資料庫 model
                 Order insert = new Order();
+                //                      dto 是 接收資料的模板 只開需要使用者輸入的 屬性
+                //                          CurrentValues.SetValues 把dto接到的放到對應的order屬性裡面
                 _context.Orders.Add(insert).CurrentValues.SetValues(orderDto);
                 _context.SaveChanges();
-
+                // 存進資料庫
+                // 存完之後 才有orderid 在 insert身上
                 foreach (var item in orderDto.OrderDetailDtos)
                 {
                     OrderDetail insert2 = new OrderDetail()
                     {
+                        // 帶入 orderID
                         OrderId = insert.OrderId
                     };
-                    _context.OrderDetails.Add(insert2).CurrentValues.SetValues(item);
+                    _context.OrderDetails.Add(insert2).CurrentValues.SetValues(item);// 對應資料
                 }
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return View(orderDto);
         }
 
         // GET: Orders/Create
@@ -92,6 +115,51 @@ namespace Lab_testpinyuan2.Controllers
             }
             return View(order);
         }
+
+
+
+        // 自己寫的 Edit
+        //order 跟 多筆orderDetail 一起編輯頁面  顯示
+        public async Task<IActionResult> EditOrderOrderDetail(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var OrderOrderDetailEditViewModel = new OrderOrderDetailEditViewModel();
+
+            OrderOrderDetailEditViewModel.Order = await (from a in _context.Orders
+                                                         where a.OrderId == id
+                                                         select new EditOrderDto
+                                                         {
+                                                             OrderId = a.OrderId,
+                                                             ClientId = a.CompanyId,
+                                                             OrderDate = a.OrderDate,
+                                                             QuoteNumber = a.QuoteNumber
+                                                         }).SingleOrDefaultAsync();
+
+            OrderOrderDetailEditViewModel.Order.EditOrderDetail = await (from a in _context.OrderDetails
+                                                                            where a.OrderId == id
+                                                                            select a).ToListAsync();
+
+            OrderOrderDetailEditViewModel.EditOrderClientDtos = await (from a in _context.Clients
+                                                                       select new EditOrderClientDto
+                                                                       {
+                                                                           ClientId = a.ClientId,
+                                                                           CompanyName = a.CompanyName,
+                                                                       }).ToListAsync();
+
+            if (OrderOrderDetailEditViewModel.Order == null)
+            {
+                return NotFound();
+            }
+            return View(OrderOrderDetailEditViewModel);
+        }
+
+
+
+
+
 
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
