@@ -94,6 +94,7 @@ namespace Lab_testpinyuan2.Controllers
             return View(orderDto);
         }
 
+        #region EF 建的CREATE
         // GET: Orders/Create
         public IActionResult Create()
         {
@@ -115,7 +116,7 @@ namespace Lab_testpinyuan2.Controllers
             }
             return View(order);
         }
-
+        #endregion
 
 
         // 自己寫的 Edit
@@ -139,8 +140,8 @@ namespace Lab_testpinyuan2.Controllers
                                                          }).SingleOrDefaultAsync();
 
             OrderOrderDetailEditViewModel.Order.EditOrderDetail = await (from a in _context.OrderDetails
-                                                                            where a.OrderId == id
-                                                                            select a).ToListAsync();
+                                                                         where a.OrderId == id
+                                                                         select a).ToListAsync();
 
             OrderOrderDetailEditViewModel.EditOrderClientDtos = await (from a in _context.Clients
                                                                        select new EditOrderClientDto
@@ -157,10 +158,53 @@ namespace Lab_testpinyuan2.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditOrderOrderDetail(int id, EditOrderDto Order)
+        {
+            if (id != Order.OrderId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var update = _context.Orders.Find(id);
+                
+                if (update != null)
+                {
+                    // 更新order欄位資料
+                    update.CompanyId = Order.ClientId;
+                    update.OrderDate = Order.OrderDate;
+                    update.QuoteNumber = Order.QuoteNumber;
+
+                    // 更新 或 新增 orderDetail
+                    var updateOrderDetail = new OrderDetail();
+                    foreach (var orderDetail in Order.EditOrderDetail)
+                    {
+                        updateOrderDetail = _context.OrderDetails.FirstOrDefault(x => x.OrdeDetailId == orderDetail.OrdeDetailId);
+                        if(updateOrderDetail == null) // insert
+                        {
+                            orderDetail.OrderId = id;
+                            _context.OrderDetails.Add(orderDetail);
+                            int a = 0;
+                        }
+                        else // update
+                        {
+                            orderDetail.OrderId = updateOrderDetail.OrderId;
+                            orderDetail.OrdeDetailId = updateOrderDetail.OrdeDetailId;
+                            _context.Entry(updateOrderDetail).CurrentValues.SetValues(orderDetail);
+                        }
+                    }
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                }
+            }
+            return View(Order);
+        }
 
 
-
-
+        #region EF 建的 Edit
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -211,6 +255,8 @@ namespace Lab_testpinyuan2.Controllers
             }
             return View(order);
         }
+
+        #endregion
 
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)

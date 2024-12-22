@@ -11,14 +11,21 @@
 	<div class="col-md-8">
 		<form asp-action="EditOrderOrderDetail">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+			<input type="hidden" asp-for="Order.OrderId" />
 			<div class="form-group">
 				<label asp-for="Order.ClientId" class="control-label"></label>
 				@* <input asp-for="Order.ClientId" class="form-control" /> *@
 				<select name="Order.ClientId" class="from-select">
 					@foreach (var item in Model.EditOrderClientDtos)
 					{
-						<option value="@item.ClientId">@item.CompanyName</option>
+						@if (item.ClientId == Model.Order.ClientId)
+						{
+							<option value="@item.ClientId" selected>@item.CompanyName</option>
+						}
+						else
+						{
+							<option value="@item.ClientId">@item.CompanyName</option>
+						}
 					}
 				</select>
 				<span asp-validation-for="Order.ClientId" class="text-danger"></span>
@@ -40,7 +47,6 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>OrdeDetailId</th>
 						<th>Product Name</th>
 						<th>Amount</th>
 						<th>Price</th>
@@ -53,9 +59,8 @@
 						for (int i = 0; i < Model.Order.EditOrderDetail.Count; i++)
 						{
 							<tr>
-								<td>
-									<input asp-for="Order.EditOrderDetail[@i].OrdeDetailId" class="form-control" />
-								</td>
+								<input type="hidden" asp-for="Order.EditOrderDetail[@i].OrderId" />
+								<input type="hidden" asp-for="Order.EditOrderDetail[@i].OrdeDetailId" />
 								<td>
 									<input asp-for="Order.EditOrderDetail[@i].ProductName" class="form-control" />
 								</td>
@@ -99,7 +104,6 @@
 
 			const newRow = document.createElement('tr');
 			newRow.innerHTML = `
-				<td><input name="Order.EditOrderDetail[${rowIndex}].OrdeDetailId" class="form-control" required /></td>
 				<td><input name="Order.EditOrderDetail[${rowIndex}].ProductName" class="form-control" required /></td>
 				<td><input name="Order.EditOrderDetail[${rowIndex}].Amount" class="form-control" type="number" min="1" required /></td>
 				<td><input name="Order.EditOrderDetail[${rowIndex}].Price" class="form-control" type="number" min="0" required /></td>
