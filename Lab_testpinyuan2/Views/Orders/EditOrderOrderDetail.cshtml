@@ -1,10 +1,10 @@
 ﻿@model Lab_testpinyuan2.ViewModels.OrderOrderDetailEditViewModel
 
 @{
-	ViewData["Title"] = "Otder - EditOrderOrderDetail";
+	ViewData["Title"] = "編輯訂單";
 }
 
-<h1>EditOrderOrderDetail</h1>
+<h1>@ViewData["Title"]</h1>
 
 <hr />
 <div class="row">
@@ -47,9 +47,9 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>Product Name</th>
-						<th>Amount</th>
-						<th>Price</th>
+						<th>@Html.DisplayNameFor(model => model.Order.EditOrderDetail[0].ProductName)</th>
+						<th>@Html.DisplayNameFor(model => model.Order.EditOrderDetail[0].Amount)</th>
+						<th>@Html.DisplayNameFor(model => model.Order.EditOrderDetail[0].Price)</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -63,15 +63,18 @@
 								<input type="hidden" asp-for="Order.EditOrderDetail[@i].OrdeDetailId" />
 								<td>
 									<input asp-for="Order.EditOrderDetail[@i].ProductName" class="form-control" />
+									<span asp-validation-for="Order.EditOrderDetail[@i].ProductName" class="text-danger"></span>
 								</td>
 								<td>
 									<input asp-for="Order.EditOrderDetail[@i].Amount" class="form-control" type="number" min="1" />
+									<span asp-validation-for="Order.EditOrderDetail[@i].Amount" class="text-danger"></span>
 								</td>
 								<td>
 									<input asp-for="Order.EditOrderDetail[@i].Price" class="form-control" type="number" min="0" />
+									<span asp-validation-for="Order.EditOrderDetail[@i].Price" class="text-danger"></span>
 								</td>
 								<td>
-									<button type="button" class="btn btn-danger" onclick="removeOrderDetailRow(this)">Remove</button>
+									@* <button type="button" class="btn btn-danger" onclick="removeOrderDetailRow(this)">Remove</button> *@
 								</td>
 							</tr>
 						}
@@ -79,17 +82,17 @@
 				</tbody>
 			</table>
 
-			<button type="button" class="btn btn-primary" onclick="addOrderDetailRow()">Add Order Detail</button>
+			<button type="button" class="btn btn-primary" onclick="addOrderDetailRow()">增加一列</button>
 
-			<div class="form-group mt-3">
-				<input type="submit" value="Create" class="btn btn-success" />
+			<div class="form-group my-3">
+				<input type="submit" value="儲存修改" class="btn btn-success" />
 			</div>
 		</form>
 	</div>
 </div>
 
 <div>
-	<a asp-action="Index">Back to List</a>
+	<a asp-action="Index">回訂單列表</a>
 </div>
 
 @section Scripts {
@@ -104,10 +107,19 @@
 
 			const newRow = document.createElement('tr');
 			newRow.innerHTML = `
-				<td><input name="Order.EditOrderDetail[${rowIndex}].ProductName" class="form-control" required /></td>
-				<td><input name="Order.EditOrderDetail[${rowIndex}].Amount" class="form-control" type="number" min="1" required /></td>
-				<td><input name="Order.EditOrderDetail[${rowIndex}].Price" class="form-control" type="number" min="0" required /></td>
-				<td><button type="button" class="btn btn-danger" onclick="removeOrderDetailRow(this)">Remove</button></td>
+				<td>
+					<input name="Order.EditOrderDetail[${rowIndex}].ProductName" class="form-control" required />
+					<span asp-validation-for="Order.EditOrderDetail[${rowIndex}].ProductName" class="text-danger"></span>
+				</td>
+				<td>
+					<input name="Order.EditOrderDetail[${rowIndex}].Amount" class="form-control" type="number" min="1" required />
+					<span asp-validation-for="Order.EditOrderDetail[${rowIndex}].Amount" class="text-danger"></span>
+					</td>
+				<td>
+					<input name="Order.EditOrderDetail[${rowIndex}].Price" class="form-control" type="number" min="0" required />
+					<span asp-validation-for="Order.EditOrderDetail[${rowIndex}].Price" class="text-danger"></span>
+				</td>
+				<td><button type="button" class="btn btn-danger" onclick="removeOrderDetailRow(this)">移除此項</button></td>
 			`;
 
 			tableBody.appendChild(newRow);

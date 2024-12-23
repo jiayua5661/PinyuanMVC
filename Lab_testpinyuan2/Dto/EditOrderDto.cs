@@ -9,6 +9,7 @@ namespace Lab_testpinyuan2.Dto
     {
         public int OrderId { get; set; }
 
+        [DisplayName("客戶名稱")]
         public int ClientId { get; set; }
 
         [DisplayName("訂單日期")]

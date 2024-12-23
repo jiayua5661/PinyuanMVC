@@ -18,10 +18,20 @@ namespace Lab_testpinyuan2.Controllers
             _context = context;
         }
 
-        // GET: Clients
+        // GET: Clients // 顯示全部清單
         public async Task<IActionResult> Index()
         {
             return View(await _context.Clients.ToListAsync());
+        }
+
+        // 搜尋客戶名稱
+        [HttpPost]
+        public async Task<IActionResult> Index(string searchText)
+        {
+            var data = from a in _context.Clients
+                       where a.CompanyName.Contains(searchText)
+                       select a;
+            return View(await data.ToListAsync());
         }
 
         // GET: Clients/Details/5

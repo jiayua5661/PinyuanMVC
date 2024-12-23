@@ -1,10 +1,10 @@
 ﻿@model Lab_testpinyuan2.ViewModels.OrderOrderDetailCreateViewModel
 
 @{
-	ViewData["Title"] = "Create Order";
+	ViewData["Title"] = "新增訂單";
 }
 
-<h1>Create Order</h1>
+<h1>@ViewData["Title"]</h1>
 
 <hr />
 <div class="row">
@@ -20,7 +20,6 @@
 					{
 						<option value="@item.ClientId">@item.CompanyName</option>
 					}
-					<option></option>
 				</select>
 				<span asp-validation-for="orderDto.CompanyId" class="text-danger"></span>
 			</div>
@@ -41,9 +40,9 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>Product Name</th>
-						<th>Amount</th>
-						<th>Price</th>
+						<th>@Html.DisplayNameFor(model => model.orderDto.OrderDetailDtos[0].ProductName)</th>
+						<th>@Html.DisplayNameFor(model => model.orderDto.OrderDetailDtos[0].Amount)</th>
+						<th>@Html.DisplayNameFor(model => model.orderDto.OrderDetailDtos[0].Price)</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -71,17 +70,17 @@
 				</tbody>
 			</table>
 
-			<button type="button" class="btn btn-primary" onclick="addOrderDetailRow()">Add Order Detail</button>
+			<button type="button" class="btn btn-primary" onclick="addOrderDetailRow()">增加一列</button>
 
-			<div class="form-group mt-3">
-				<input type="submit" value="Create" class="btn btn-success" />
+			<div class="form-group my-3">
+				<input type="submit" value="儲存訂單" class="btn btn-success" />
 			</div>
 		</form>
 	</div>
 </div>
 
 <div>
-	<a asp-action="Index">Back to List</a>
+	<a asp-action="Index">回訂單列表</a>
 </div>
 
 @section Scripts {
@@ -99,7 +98,7 @@
 				<td><input name="orderDto.orderDetailDtos[${rowIndex}].ProductName" class="form-control" required /></td>
 				<td><input name="orderDto.orderDetailDtos[${rowIndex}].Amount" class="form-control" type="number" min="1" required /></td>
 				<td><input name="orderDto.orderDetailDtos[${rowIndex}].Price" class="form-control" type="number" min="0" required /></td>
-				<td><button type="button" class="btn btn-danger" onclick="removeOrderDetailRow(this)">Remove</button></td>
+				<td><button type="button" class="btn btn-danger" onclick="removeOrderDetailRow(this)">移除此項</button></td>
 			`;
 
 			tableBody.appendChild(newRow);

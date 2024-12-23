@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Lab_testpinyuan2.Models;
 
@@ -24,5 +25,6 @@ public partial class Client
     public string? Address { get; set; }
 
     [DisplayName("統一編號")]
+    [MaxLength(8)]
     public string? TaxIdnumber { get; set; }
 }

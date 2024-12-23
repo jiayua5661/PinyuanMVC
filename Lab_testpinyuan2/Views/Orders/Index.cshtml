@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Lab_testpinyuan2.Dto.OrderIndexDto>
 
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = "訂單清單列表";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-	<a asp-action="CreateOrderOrderDetail">Create New</a>
+	<a asp-action="CreateOrderOrderDetail">新增訂單</a>
 </p>
 <table class="table">
 	<thead>
@@ -38,8 +38,8 @@
 					@Html.DisplayFor(modelItem => item.QuoteNumber)
 				</td>
 				<td>
-					<a asp-action="EditOrderOrderDetail" asp-route-id="@item.OrderId">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.OrderId">Details</a>
+					<a asp-action="EditOrderOrderDetail" asp-route-id="@item.OrderId">編輯訂單</a> |
+					<a asp-action="Details" asp-route-id="@item.OrderId">訂單詳細資訊</a>
 					@* <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a> *@
 				</td>
 			</tr>

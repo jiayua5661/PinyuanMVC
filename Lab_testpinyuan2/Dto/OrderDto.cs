@@ -5,12 +5,13 @@ namespace LAB_testpinyuan.Dto
 {
     public class OrderDto
     {
+        [DisplayName("客戶名稱")]
         public int CompanyId { get; set; }
 
-        [DisplayName("訂單日")]
+        [DisplayName("訂單日期")]
         public DateOnly OrderDate { get; set; }
 
-        [DisplayName("估價單號")]
+        [DisplayName("估價單號碼")]
         [MaxLength(5)]
         public string? QuoteNumber { get; set; }
 

@@ -1,13 +1,20 @@
 ﻿@model IEnumerable<Lab_testpinyuan2.Models.Client>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "客戶清單";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
+
+@* 搜尋客戶名稱 *@
+<form action="~/Clients/Index" method="post" class="my-3">
+    <label for="searchClient">搜尋客戶 : </label>
+    <input id="searchClient" type="text" name="searchText" />
+    <input type="submit" value="搜尋"/>
+</form>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">新增客戶資料</a>
 </p>
 <table class="table">
     <thead>
@@ -49,8 +56,8 @@
                 @Html.DisplayFor(modelItem => item.TaxIdnumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ClientId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClientId">Details</a>
+                <a asp-action="Edit" asp-route-id="@item.ClientId">編輯客戶資料</a>
+                @* <a asp-action="Details" asp-route-id="@item.ClientId">Details</a> *@
                 @* <a asp-action="Delete" asp-route-id="@item.ClientId">Delete</a> *@
             </td>
         </tr>
