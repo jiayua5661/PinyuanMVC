@@ -37,6 +37,24 @@ namespace Lab_testpinyuan2.Controllers
             return View(await result.ToListAsync());
         }
 
+        // 搜尋估價單號碼
+        [HttpPost]
+        public async Task<IActionResult> Index(string searchText)
+        {
+            var data = from a in _context.Orders
+                       join b in _context.Clients on a.CompanyId equals b.ClientId
+                       where a.QuoteNumber.Contains(searchText)
+                       select new OrderIndexDto
+                       {
+                           OrderId = a.OrderId,
+                           CompanyName = b.CompanyName,
+                           OrderDate = a.OrderDate,
+                           QuoteNumber = a.QuoteNumber
+                       };
+
+            return View(await data.ToListAsync());
+        }
+
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {

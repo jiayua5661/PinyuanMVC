@@ -31,6 +31,7 @@ namespace Lab_testpinyuan2.Controllers
             var data = from a in _context.Clients
                        where a.CompanyName.Contains(searchText)
                        select a;
+
             return View(await data.ToListAsync());
         }
 

@@ -6,6 +6,13 @@
 
 <h1>@ViewData["Title"]</h1>
 
+@* 搜尋估價單號碼 *@
+<form action="~/Orders/Index" method="post" class="my-3">
+	<label for="searchOrder">搜尋估價單號碼 : </label>
+	<input id="searchOrder" type="text" name="searchText" />
+	<input type="submit" value="搜尋" />
+</form>
+
 <p>
 	<a asp-action="CreateOrderOrderDetail">新增訂單</a>
 </p>
