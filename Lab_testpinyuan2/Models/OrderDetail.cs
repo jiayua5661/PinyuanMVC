@@ -15,7 +15,7 @@ public partial class OrderDetail
     [DisplayName("產品名稱")]
     public string ProductName { get; set; } = null!;
 
-    [Range(1, 32000, ErrorMessage = "數量範圍1-32000")]
+    [Range(0, 32000, ErrorMessage = "數量範圍0-32000")]
     [DisplayName("數量")]
     public short Amount { get; set; }
 

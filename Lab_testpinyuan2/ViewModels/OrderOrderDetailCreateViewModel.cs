@@ -1,5 +1,4 @@
-﻿using LAB_testpinyuan.Dto;
-using Lab_testpinyuan2.Dto;
+﻿using Lab_testpinyuan2.Dto;
 
 namespace Lab_testpinyuan2.ViewModels
 {

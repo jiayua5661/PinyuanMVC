@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab_testpinyuan2.Models;
-using LAB_testpinyuan.Dto;
 using System.ComponentModel.Design;
 using Lab_testpinyuan2.Dto;
 using Lab_testpinyuan2.ViewModels;
@@ -34,6 +33,7 @@ namespace Lab_testpinyuan2.Controllers
                              OrderDate = a.OrderDate,
                              QuoteNumber = a.QuoteNumber
                          };
+
             return View(await result.ToListAsync());
         }
 
@@ -213,7 +213,6 @@ namespace Lab_testpinyuan2.Controllers
                         {
                             orderDetail.OrderId = id;
                             _context.OrderDetails.Add(orderDetail);
-                            int a = 0;
                         }
                         else // update
                         {

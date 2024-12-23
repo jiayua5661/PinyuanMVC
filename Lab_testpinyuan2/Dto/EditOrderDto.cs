@@ -1,5 +1,4 @@
-﻿using LAB_testpinyuan.Dto;
-using Lab_testpinyuan2.Models;
+﻿using Lab_testpinyuan2.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

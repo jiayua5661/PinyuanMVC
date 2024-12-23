@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace LAB_testpinyuan.Dto
+namespace Lab_testpinyuan2.Dto
 {
     public class OrderDto
     {

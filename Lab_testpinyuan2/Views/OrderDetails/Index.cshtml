@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Lab_testpinyuan2.ViewModels.OrderDetailIndexViewModel>
+
+@{
+	ViewData["Title"] = "訂單明細";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@* 搜尋產品名稱 *@
+<form action="~/OrderDetails/Index" method="post" class="my-3">
+	<label for="searchOrder">搜尋產品名稱 : </label>
+	<input id="searchOrder" type="text" name="searchText" />
+	<input type="submit" value="搜尋" />
+</form>
+
+@* <p>
+	<a asp-action="Create">Create New</a>
+</p> *@
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.CompanyName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.OrderDate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.QuoteNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ProductName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Amount)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Price)
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.CompanyName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.OrderDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.QuoteNumber)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Amount)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Price)
+				</td>
+				@*             <td>
+                <a asp-action="Edit" asp-route-id="@item.OrdeDetailId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OrdeDetailId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OrdeDetailId">Delete</a>
+            </td> *@
+			</tr>
+		}
+	</tbody>
+</table>
