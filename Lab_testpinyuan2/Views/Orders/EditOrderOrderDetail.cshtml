@@ -15,6 +15,7 @@
 			<div class="form-group">
 				<label asp-for="Order.ClientId" class="control-label"></label>
 
+				@* 改下拉式 可輸入 自動查詢 *@
 				<input type="hidden" asp-for="Order.ClientId" id="inputCompanyID" />
 				<input type="text" id="selectCompany" list="companyIDList" class="form-control" />
 				<datalist id="companyIDList">
@@ -23,7 +24,6 @@
 						<option data-companyID="@item.ClientId">@item.CompanyName</option>
 					}
 				</datalist>
-
 
 
 @* 
@@ -55,7 +55,7 @@
 				<span asp-validation-for="Order.QuoteNumber" class="text-danger"></span>
 			</div>
 
-			<h4>Order Details</h4>
+			<h4 class="mt-3">訂單明細</h4>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -156,6 +156,7 @@
 
 		window.onload = () => {
 
+			// 畫面載入後 改成選的那一間公司名稱
 			const companyIDList = document.getElementById("companyIDList").children;
 			let inputCompanyIDa = document.getElementById("inputCompanyID");
 			let selectCompany = document.getElementById("selectCompany");

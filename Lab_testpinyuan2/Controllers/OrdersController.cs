@@ -55,6 +55,41 @@ namespace Lab_testpinyuan2.Controllers
             return View(await data.ToListAsync());
         }
 
+        // 自己寫的顯示 訂單
+        public async Task<IActionResult> OrderOrderDetailDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var OrderOrderDetailDetailsViewModel = new OrderOrderDetailDetailsViewModel();
+
+            OrderOrderDetailDetailsViewModel = await (from a in _context.Orders
+                                                      join b in _context.Clients on a.CompanyId equals b.ClientId
+                                                      where a.OrderId == id
+                                                      select new OrderOrderDetailDetailsViewModel
+                                                      {
+                                                          CompanyName = b.CompanyName,
+                                                          OrderDate = a.OrderDate,
+                                                          QuoteNumber = a.QuoteNumber
+                                                      }).SingleOrDefaultAsync();
+
+            OrderOrderDetailDetailsViewModel.OrderDetailDtos = await (from a in _context.OrderDetails
+                                                                      where a.OrderId == id
+                                                                      select new OrderDetailDto
+                                                                      {
+                                                                          ProductName = a.ProductName,
+                                                                          Amount = a.Amount,
+                                                                          Price = a.Price,
+                                                                      }).ToListAsync();
+
+            if (OrderOrderDetailDetailsViewModel == null)
+            {
+                return NotFound();
+            }
+            return View(OrderOrderDetailDetailsViewModel);
+        }
+
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -79,12 +114,12 @@ namespace Lab_testpinyuan2.Controllers
         {
             var OrderOrderDetailCreateViewModel = new OrderOrderDetailCreateViewModel();
 
-            OrderOrderDetailCreateViewModel.EditOrderClientDtos = await(from a in _context.Clients
-                                                                      select new EditOrderClientDto
-                                                                      {
-                                                                          ClientId = a.ClientId,
-                                                                          CompanyName = a.CompanyName,
-                                                                      }).ToListAsync();
+            OrderOrderDetailCreateViewModel.EditOrderClientDtos = await (from a in _context.Clients
+                                                                         select new EditOrderClientDto
+                                                                         {
+                                                                             ClientId = a.ClientId,
+                                                                             CompanyName = a.CompanyName,
+                                                                         }).ToListAsync();
             return View(OrderOrderDetailCreateViewModel);
         }
 
@@ -196,7 +231,7 @@ namespace Lab_testpinyuan2.Controllers
             if (ModelState.IsValid)
             {
                 var update = _context.Orders.Find(id);
-                
+
                 if (update != null)
                 {
                     // 更新order欄位資料
@@ -209,7 +244,7 @@ namespace Lab_testpinyuan2.Controllers
                     foreach (var orderDetail in Order.EditOrderDetail)
                     {
                         updateOrderDetail = _context.OrderDetails.FirstOrDefault(x => x.OrdeDetailId == orderDetail.OrdeDetailId);
-                        if(updateOrderDetail == null) // insert
+                        if (updateOrderDetail == null) // insert
                         {
                             orderDetail.OrderId = id;
                             _context.OrderDetails.Add(orderDetail);
@@ -221,8 +256,8 @@ namespace Lab_testpinyuan2.Controllers
                             _context.Entry(updateOrderDetail).CurrentValues.SetValues(orderDetail);
                         }
                     }
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
             }
             return View(Order);
