@@ -9,7 +9,7 @@
 @* 搜尋估價單號碼 *@
 <form action="~/Orders/Index" method="post" class="my-3">
 	<label for="searchOrder">搜尋估價單號碼 : </label>
-	<input id="searchOrder" type="text" name="searchText" />
+	<input id="searchOrder" type="text" name="searchText" value="@ViewBag.SearchText" />
 	<input type="submit" value="搜尋" />
 </form>
 

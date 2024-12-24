@@ -9,7 +9,7 @@
 @* 搜尋產品名稱 *@
 <form action="~/OrderDetails/Index" method="post" class="my-3">
 	<label for="searchOrder">搜尋產品名稱 : </label>
-	<input id="searchOrder" type="text" name="searchText" />
+	<input id="searchOrder" type="text" name="searchText" value="@ViewBag.SearchText" />
 	<input type="submit" value="搜尋" />
 </form>
 

@@ -41,6 +41,7 @@ namespace Lab_testpinyuan2.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string searchText)
         {
+            ViewBag.SearchText = searchText;
             var data = from a in _context.OrderDetails
                        join b in _context.Orders on a.OrderId equals b.OrderId
                        join c in _context.Clients on b.CompanyId equals c.ClientId

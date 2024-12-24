@@ -28,6 +28,7 @@ namespace Lab_testpinyuan2.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string searchText)
         {
+            ViewBag.SearchText = searchText;
             var data = from a in _context.Clients
                        where a.CompanyName.Contains(searchText)
                        select a;

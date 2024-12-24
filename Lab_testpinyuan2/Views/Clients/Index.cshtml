@@ -9,7 +9,7 @@
 @* 搜尋客戶名稱 *@
 <form action="~/Clients/Index" method="post" class="my-3">
     <label for="searchClient">搜尋客戶 : </label>
-    <input id="searchClient" type="text" name="searchText" />
+    <input id="searchClient" type="text" name="searchText" value="@ViewBag.SearchText" />
     <input type="submit" value="搜尋"/>
 </form>
 
