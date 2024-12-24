@@ -14,13 +14,25 @@
 
 			<div class="form-group">
 				<label asp-for="orderDto.CompanyId" class="control-label"></label>
-				<select name="orderDto.CompanyId" class="from-select">
+
+				<input type="hidden" asp-for="orderDto.CompanyId" id="inputCompanyID" />
+				<input type="text" id="selectCompany" list="companyIDList" class="form-control" />
+				<datalist id="companyIDList">
+					@foreach (var item in Model.EditOrderClientDtos)
+					{
+						<option data-companyID="@item.ClientId">@item.CompanyName</option>
+					}
+				</datalist>
+
+
+				@* 原本的select 改成 上面 input 可以輸入 自動搜尋 *@
+				@* <select name="orderDto.CompanyId" class="from-select">
 					<option disabled selected>請選擇</option>
 					@foreach (var item in Model.EditOrderClientDtos)
 					{
 						<option value="@item.ClientId">@item.CompanyName</option>
 					}
-				</select>
+				</select> *@
 				<span asp-validation-for="orderDto.CompanyId" class="text-danger"></span>
 			</div>
 
@@ -89,6 +101,7 @@
 	}
 
 	<script>
+		// 新增明細
 		function addOrderDetailRow() {
 			const tableBody = document.getElementById('orderDetailsTableBody');
 			const rowIndex = tableBody.children.length;
@@ -97,15 +110,30 @@
 			newRow.innerHTML = `
 				<td><input name="orderDto.orderDetailDtos[${rowIndex}].ProductName" class="form-control" required /></td>
 				<td><input name="orderDto.orderDetailDtos[${rowIndex}].Amount" class="form-control" type="number" min="1" required /></td>
-				<td><input name="orderDto.orderDetailDtos[${rowIndex}].Price" class="form-control" type="number" min="0" required /></td>
+				<td><input name="orderDto.orderDetailDtos[${rowIndex}].Price" class="form-control" type="number" min="1" required /></td>
 				<td><button type="button" class="btn btn-danger" onclick="removeOrderDetailRow(this)">移除此項</button></td>
 			`;
 
 			tableBody.appendChild(newRow);
 		}
 
+		// 移除明細
 		function removeOrderDetailRow(button) {
 			button.closest('tr').remove();
 		}
+
+		// 客戶改成可輸入 自動查詢 的下拉式選單
+		let inputCompanyIDa = document.getElementById("inputCompanyID");
+		let selectCompany = document.getElementById("selectCompany");
+		selectCompany.addEventListener("change", () => {
+			const companyIDList = document.getElementById("companyIDList").children;
+
+			for (const item of companyIDList) {
+				if (selectCompany.value == item.value) {
+					inputCompanyIDa.value = item.getAttribute("data-companyID");
+				}
+			}
+		})
+
 	</script>
 }

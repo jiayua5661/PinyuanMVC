@@ -14,7 +14,19 @@
 			<input type="hidden" asp-for="Order.OrderId" />
 			<div class="form-group">
 				<label asp-for="Order.ClientId" class="control-label"></label>
-				@* <input asp-for="Order.ClientId" class="form-control" /> *@
+
+				<input type="hidden" asp-for="Order.ClientId" id="inputCompanyID" />
+				<input type="text" id="selectCompany" list="companyIDList" class="form-control" />
+				<datalist id="companyIDList">
+					@foreach (var item in Model.EditOrderClientDtos)
+					{
+						<option data-companyID="@item.ClientId">@item.CompanyName</option>
+					}
+				</datalist>
+
+
+
+@* 
 				<select name="Order.ClientId" class="from-select">
 					@foreach (var item in Model.EditOrderClientDtos)
 					{
@@ -27,7 +39,7 @@
 							<option value="@item.ClientId">@item.CompanyName</option>
 						}
 					}
-				</select>
+				</select> *@
 				<span asp-validation-for="Order.ClientId" class="text-danger"></span>
 			</div>
 
@@ -66,7 +78,7 @@
 									<span asp-validation-for="Order.EditOrderDetail[@i].ProductName" class="text-danger"></span>
 								</td>
 								<td>
-									<input asp-for="Order.EditOrderDetail[@i].Amount" class="form-control" type="number" min="1" />
+									<input asp-for="Order.EditOrderDetail[@i].Amount" class="form-control" type="number" min="0" />
 									<span asp-validation-for="Order.EditOrderDetail[@i].Amount" class="text-danger"></span>
 								</td>
 								<td>
@@ -128,5 +140,33 @@
 		function removeOrderDetailRow(button) {
 			button.closest('tr').remove();
 		}
+
+		// 客戶改成可輸入 自動查詢 的下拉式選單
+		let inputCompanyIDa = document.getElementById("inputCompanyID");
+		let selectCompany = document.getElementById("selectCompany");
+		selectCompany.addEventListener("change", () => {
+			const companyIDList = document.getElementById("companyIDList").children;
+
+			for (const item of companyIDList) {
+				if (selectCompany.value == item.value) {
+					inputCompanyIDa.value = item.getAttribute("data-companyID");
+				}
+			}
+		})
+
+		window.onload = () => {
+
+			const companyIDList = document.getElementById("companyIDList").children;
+			let inputCompanyIDa = document.getElementById("inputCompanyID");
+			let selectCompany = document.getElementById("selectCompany");
+
+			for (const item of companyIDList) {
+				if (inputCompanyIDa.value == item.getAttribute("data-companyID")) {
+					selectCompany.value = item.value;
+				}
+			}
+		}
+
+
 	</script>
 }
